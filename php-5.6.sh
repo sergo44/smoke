@@ -105,7 +105,7 @@ fi;
 #
 read -p "Install ? (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
-    checkinstall --pkgname=php-$VER --replaces=php-$VER -y
+    make install
 fi;
 
 #
