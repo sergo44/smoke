@@ -166,9 +166,9 @@ read -p "Set as default version for php-5.6 opt?" REPLY
 if [ $REPLY = "y" ]; then
     echo "#!/opt/php-$VER/bin/php-cgi" > /opt/php-cgi-5.6
     chmod 755 /opt/php-cgi-5.6
-    
-    echo "#!/opt/php-$VER/bin/php" > /opt/php-5.6
-    chmod 755 /opt/php-5.6
+
+    rm /opt/php-5.6
+    ln -s /opt/php-$VER /opt/php-5.6
 fi;
 
 
