@@ -1,11 +1,40 @@
 #!/bin/sh
 
+read -p "Please, enter version of PHP 5.3 to build (etc 5.3.29):" VER
 
-VER="5.3.29"
+SRC_PREFIX="/usr/src/php";
+
 CFG="/opt/php-$VER/etc"
 PREFIX="/opt/php-$VER"
+SRC="/usr/src/php/php-$VER"
+TARGZ="php-$VER.tar.gz"
 
-cd "/opt/src/php-$VER";
+if [ ! -d  $SRC_PREFIX ]; then
+    mkdir -p $SRC_PREFIX
+fi;
+
+cd $SRC_PREFIX
+
+# DOWNLOADING
+read -p "Download source for version $VER ? (y/n)?" REPLY
+if [ $REPLY = "y" ]; then
+    wget "http://us1.php.net/distributions/$TARGZ" --content-disposition
+
+    if [ ! -f $TARGZ ]; then
+	echo "File $TARGZ not found (not downloaded)";
+	exit 1;
+    fi;
+    
+    tar -xzf $TARGZ
+    rm $TARGZ
+fi;
+
+if [ ! -d $SRC ]; then
+    echo "Src directory $SRC not exists";
+    exit 1;
+fi;
+
+cd $SRC;
 
 #
 # Configuring
@@ -21,37 +50,41 @@ read -p "Configure (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5
 
-    ./configure\
-	--prefix="$PREFIX"\
-	--enable-cgi \
-	--enable-static \
-	\
-	--enable-mbstring \
-	--enable-soap \
-	--enable-zip \
-	--enable-calendar\
-	--enable-exif\
-	\
-	--with-bz2\
-	--with-zlib\
-	--with-openssl=shared\
-	--with-curl=shared \
-	\
-	--with-gd=shared \
-	--enable-gd-native-ttf \
-	--with-freetype-dir=/usr \
-	\
-	--with-mcrypt \
-	--with-mysql \
-	--with-mysqli \
-	--with-pgsql \
-	\
-	--with-jpeg-dir=/usr \
-	--with-png-dir=/usr \
-	--with-config-file-path="$CFG" \
-	--with-config-file-scan-dir="$CFG/conf.d"
+    if [ ! -d /usr/include/freetype2/freetype ]; then
+	mkdir /usr/include/freetype2/freetype
+	ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h
+    fi;
 
-fi
+    ./configure\
+        --prefix="$PREFIX"\
+        --enable-cgi \
+        --enable-static \
+        \
+        --enable-mbstring \
+        --enable-soap \
+        --enable-zip \
+        --enable-calendar\
+        --enable-exif\
+        \
+        --with-bz2\
+        --with-zlib\
+        --with-openssl=shared\
+        --with-curl=shared \
+        \
+        --with-gd=shared \
+        --enable-gd-native-ttf \
+        --with-freetype-dir=/usr \
+        \
+        --with-mcrypt \
+        --with-mysql \
+        --with-mysqli \
+        --with-pgsql \
+        \
+        --with-jpeg-dir=/usr \
+        --with-png-dir=/usr \
+        --with-config-file-path="$CFG" \
+        --with-config-file-scan-dir="$CFG/conf.d"
+fi;
 
 read -p "Make ? (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
@@ -95,7 +128,8 @@ if [ $REPLY = "y" ]; then
     echo "extension=openssl.so;" > $CFG/conf.d/openssl.ini
     echo "extension=curl.so;" > $CFG/conf.d/curl.ini
     echo "extension=gd.so;" > $CFG/conf.d/gd.ini
-    
+    echo "extension=gettext.so;" > $CFG/conf.d/gettext.ini
+
     # defaults
     echo "date.timezone=\"Europe/Moscow\";" > $CFG/conf.d/defaults.ini
 
@@ -112,7 +146,7 @@ read -p "Pecl install imagick (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5-imagick --install-recommends
     cd $PREFIX/bin/
-    ./pecl install imagick
+    ./pecl install imagick-beta
     echo "extension=imagick.so;" > $CFG/conf.d/imagick.ini
 fi;
 
@@ -123,6 +157,9 @@ read -p "Set as default version for php-5.3 opt?" REPLY
 if [ $REPLY = "y" ]; then
     echo "#!/opt/php-$VER/bin/php-cgi" > /opt/php-cgi-5.3
     chmod 755 /opt/php-cgi-5.3
+
+    rm /opt/php-5.3
+    ln -s /opt/php-$VER /opt/php-5.3
 fi;
 
 
