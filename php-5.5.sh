@@ -17,7 +17,7 @@ cd $SRC_PREFIX
 # DOWNLOADING
 read -p "Download source for version $VER ? (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
-    wget "http://ru2.php.net/get/$TARGZ/from/this/mirror" --content-disposition
+    wget "http://php.net/get/$TARGZ/from/this/mirror" --content-disposition
 
     if [ ! -f $TARGZ ]; then
 	echo "File $TARGZ not found (not downloaded)";
