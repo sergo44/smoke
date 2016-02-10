@@ -9,6 +9,7 @@ then
     git checkout tags/curl-7_44_0
 else
     cd $SRC
+    make clean
     git pull
 fi;
 

@@ -6,6 +6,7 @@ then
     git clone https://github.com/openssl/openssl.git -b OpenSSL_1_0_1-stable $SRC
 else
     cd $SRC
+    make clean
     git pull
 fi;
 
