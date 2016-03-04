@@ -35,7 +35,9 @@ if [ $REPLY = "y" ]; then
 	--with-jpeg-dir=/usr \
 	--with-png-dir=/usr \
 	--with-config-file-path="$CFG" \
-	--with-config-file-scan-dir="$CFG/conf.d"
+	--with-config-file-scan-dir="$CFG/conf.d" \
+	--with-libdir=lib/x86_64-linux-gnu
+	
 	
     sleep 10
     make clean
@@ -74,7 +76,7 @@ read -p "Pecl install imagick (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5-imagick --install-recommends
     cd $PREFIX/bin/
-    ./pecl install imagick
+    ./pecl install imagick-3.1.2
     echo "extension=imagick.so;" > $CFG/conf.d/imagick.ini
 fi;
 
