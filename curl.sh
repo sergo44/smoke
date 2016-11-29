@@ -1,4 +1,4 @@
-SRC="/usr/src/curl/7_44_0"
+SRC="/usr/src/curl/7_51_0"
 
 if [ ! -d $SRC ];
 then
@@ -6,7 +6,7 @@ then
     git clone https://github.com/bagder/curl $SRC
 
     cd $SRC
-    git checkout tags/curl-7_44_0
+    git checkout tags/curl-7_51_0
 else
     cd $SRC
     make clean
