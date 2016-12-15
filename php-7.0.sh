@@ -1,6 +1,6 @@
 #!/bin/sh
 
-read -p "Please, enter version of PHP 7.0 to build (etc 7.0.2):" VER
+read -p "Please, enter version of PHP 7.0 to build (etc 7.0.14):" VER
 
 SRC_PREFIX="/usr/src/php";
 
@@ -62,6 +62,8 @@ if [ $REPLY = "y" ]; then
 	--enable-bcmath\
 	\
 	--with-zlib\
+	--with-openssl=/opt/openssl \
+	--with-curl=/opt/curl \
 	--with-gettext=shared \
 	\
 	--with-gd=shared \
@@ -78,9 +80,6 @@ if [ $REPLY = "y" ]; then
 	--with-config-file-scan-dir="$CFG/conf.d"
 	#--enable-debug
 	#--with-pgsql
-	#--with-openssl=/opt/openssl \
-	#--with-curl=/opt/curl \
-
 fi
 
 read -p "Make ? (y/n)?" REPLY
@@ -141,7 +140,6 @@ if [ $REPLY = "y" ]; then
 
     # defaults
     echo "date.timezone=\"Europe/Moscow\";" > $CFG/conf.d/defaults.ini
-    echo "mysqli.default_socket=\"/var/run/mysqld/mysqld.sock\";" >> $CFG/conf.d/defaults.ini
 
     # limits
     echo "post_max_size=512m;" > $CFG/conf.d/limits.ini
@@ -156,31 +154,39 @@ read -p "Pecl install imagick (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5-imagick --install-recommends
     cd $PREFIX/bin/
-    ./pecl install imagick-beta
+    ./pecl install imagick
     echo "extension=imagick.so;" > $CFG/conf.d/imagick.ini
 fi;
 
 #
-# Pecl imagemagic
+# Pecl memcahed
 #
-read -p "Pecl install xdebug (y/n)?" REPLY
+read -p "Pecl install memcached (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
-    apt-get build-dep php5-xdebug --install-recommends
-    cd $PREFIX/bin/
-    ./pecl install xdebug-beta
-    echo "zend_extension=xdebug.so;" > $CFG/conf.d/xdebug.ini
+    apt-get build-dep php5-memcached --install-recommends
+    cd /usr/src/smoke
+    rm ./php-memcached -rf
+    git clone https://github.com/php-memcached-dev/php-memcached.git -b php7
+    cd php-memcached
+    $PREFIX/bin/phpize .
+    ./configure --with-php-config=$PREFIX/bin/php-config --disable-memcached-sasl
+    make
+    make install
+    cd ..
+    rm ./php-memcached -rf
+    echo "extension=memcached.so;" > $CFG/conf.d/memcached.ini
 fi;
 
 
 #
-# Set as default PHP-5.6 OPT CGI ?
+# Set as default PHP-7.0 OPT CGI ?
 #
 read -p "Set as default version for php-7.0 opt?" REPLY
 if [ $REPLY = "y" ]; then
     echo "#!/opt/php-$VER/bin/php-cgi" > /opt/php-cgi-7.0
     chmod 755 /opt/php-cgi-7.0
 
-    rm /opt/php-7.0 -f
+    rm /opt/php-7.0
     ln -s /opt/php-$VER /opt/php-7.0
 fi;
 
