@@ -145,6 +145,9 @@ if [ $REPLY = "y" ]; then
     echo "post_max_size=512m;" > $CFG/conf.d/limits.ini
     echo "memory_limit=128m;" >> $CFG/conf.d/limits.ini
     echo "upload_max_filesize=512m;" >> $CFG/conf.d/limits.ini
+    
+    # mysql socket
+    echo "mysqli.default_socket=\"/var/run/mysqld/mysqld.sock\";" > $CFG/conf.d/mysqli.ini
 fi;
 
 #
