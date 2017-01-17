@@ -148,6 +148,10 @@ if [ $REPLY = "y" ]; then
     
     # mysql socket
     echo "mysqli.default_socket=\"/var/run/mysqld/mysqld.sock\";" > $CFG/conf.d/mysqli.ini
+
+    # pdo mysql socket
+    echo "pdo_mysql.default_socket=\"/var/run/mysqld/mysqld.sock\";" > $CFG/conf.d/pdo.ini
+    
 fi;
 
 #
