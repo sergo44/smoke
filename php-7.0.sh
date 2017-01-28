@@ -60,6 +60,7 @@ if [ $REPLY = "y" ]; then
 	--enable-calendar\
 	--enable-sockets\
 	--enable-bcmath\
+	--enable-pcntl \
 	\
 	--with-zlib\
 	--with-openssl=/opt/openssl \
@@ -74,17 +75,27 @@ if [ $REPLY = "y" ]; then
 	--with-mysqli \
 	--with-pdo-mysql \
 	\
+	--without-fpm-systemd \
+	--disable-phpdbg \
+	--disable-debug \
+	--disable-rpath \
+	--enable-sysvsem \
+	--enable-sysvshm \
+	--enable-sysvmsg \
+	\
 	--with-jpeg-dir=/usr \
 	--with-png-dir=/usr \
 	--with-config-file-path="$CFG" \
-	--with-config-file-scan-dir="$CFG/conf.d"
+	--with-config-file-scan-dir="$CFG/conf.d" \
+	--enable-fpm 
 	#--enable-debug
 	#--with-pgsql
+	#--with-pic \
 fi
 
 read -p "Make ? (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
-    make -j 12
+    make -j 6
 fi;
 
 
@@ -95,7 +106,7 @@ if [ $REPLY = "y" ]; then
     MYSQL_TEST_DB=php \
     PDO_MYSQL_TEST_USER=php \
     PDO_MYSQL_TEST_DB=php \
-    make test -j 12
+    make test -j 6
 fi;
 
 
@@ -145,6 +156,7 @@ if [ $REPLY = "y" ]; then
     echo "post_max_size=512m;" > $CFG/conf.d/limits.ini
     echo "memory_limit=128m;" >> $CFG/conf.d/limits.ini
     echo "upload_max_filesize=512m;" >> $CFG/conf.d/limits.ini
+    echo "max_input_vars=10000;" >> $CFG/conf.d/limits.ini
     
     # mysql socket
     echo "mysqli.default_socket=\"/var/run/mysqld/mysqld.sock\";" > $CFG/conf.d/mysqli.ini
@@ -152,6 +164,14 @@ if [ $REPLY = "y" ]; then
     # pdo mysql socket
     echo "pdo_mysql.default_socket=\"/var/run/mysqld/mysqld.sock\";" > $CFG/conf.d/pdo.ini
     
+    # fpm
+    echo "[global]" > $CFG/php-fpm.conf
+    echo "pid = /run/php/php-7.0-fpm.pid" >> $CFG/php-fpm.conf
+    echo "error_log = /var/log/php-7.0-fpm.log" >> $CFG/php-fpm.conf
+    echo "include=/opt/php-7.0-fpm.d/*.conf" >> $CFG/php-fpm.conf
+    
+    rm -r $CFG/php-fpm.d
+    rm -r $CFG/php-fpm.conf.default
 fi;
 
 #
