@@ -1,5 +1,10 @@
 SRC="/usr/src/curl/7_51_0"
 
+if [ -d $SRC ];
+then
+    rm -r $SRC
+fi;
+
 if [ ! -d $SRC ];
 then
     mkdir -p $SRC
