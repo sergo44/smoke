@@ -44,10 +44,20 @@ if [ $REPLY = "y" ]; then
     make clean
 fi;
 
+RELEASE=`lsb_release -sc`;
 
 read -p "Configure (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5
+    
+    if [ $RELEASE = "squeeze" ] || [ $RELEASE = "wheezy" ]
+    then
+	CFG_OPT="--with-openssl=/opt/openssl --with-curl=/opt/curl ";
+    else
+        CFG_OPT="--with-openssl --with-curl";
+    fi
+ 
+ 
 
     ./configure --prefix="$PREFIX"\
 	--enable-cgi \
@@ -60,9 +70,8 @@ if [ $REPLY = "y" ]; then
 	--enable-sockets \
 	--enable-bcmath \
 	\
-	--with-zlib\
-	--with-openssl=/opt/openssl \
-	--with-curl=/opt/curl \
+	--with-zlib \
+	$CFG_OPT \
 	--with-gettext=shared \
 	\
 	--with-gd=shared \
@@ -150,7 +159,7 @@ read -p "Pecl install imagick (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5-imagick --install-recommends
     cd $PREFIX/bin/
-    ./pecl install imagick
+    ./pecl install -f imagick
     echo "extension=imagick.so;" > $CFG/conf.d/imagick.ini
 fi;
 
