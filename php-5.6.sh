@@ -68,8 +68,9 @@ if [ $REPLY = "y" ]; then
 	--enable-soap \
 	--enable-zip \
 	--enable-calendar\
-	--enable-sockets\
-	--enable-bcmath\
+	--enable-sockets \
+	--enable-bcmath \
+	--enable-intl \
 	\
 	--with-zlib \
 	$CFG_OPT \
