@@ -10,7 +10,7 @@ if [ $REPLY = "y" ]; then
 
     ./configure --prefix="$PREFIX"\
 	--enable-fastcgi \
-	--enable-force-cgi-redirect\
+	--enable-force-cgi-redirect \
 	--enable-cgi \
 	\
 	--enable-mbstring \
