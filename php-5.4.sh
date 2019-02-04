@@ -68,6 +68,7 @@ if [ $REPLY = "y" ]; then
 	--enable-calendar \
 	--enable-sockets \
 	--enable-bcmath \
+	--enable-intl \
 	\
 	--with-zlib \
 	$CFG_OPT \
