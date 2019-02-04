@@ -65,10 +65,11 @@ if [ $REPLY = "y" ]; then
 	--enable-mbstring \
 	--enable-soap \
 	--enable-zip \
-	--enable-calendar\
-	--enable-sockets\
-	--enable-bcmath\
+	--enable-calendar \
+	--enable-sockets \
+	--enable-bcmath \
 	--enable-pcntl \
+	--enable-intl \
 	\
 	--with-zlib\
 	$CFG_OPT \
