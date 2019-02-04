@@ -65,7 +65,8 @@ if [ $REPLY = "y" ]; then
         --enable-soap \
         --enable-zip \
         --enable-calendar\
-        --enable-exif\
+        --enable-exif \
+#        --enable-intl \
         \
         --with-bz2\
         --with-zlib\
@@ -129,7 +130,7 @@ if [ $REPLY = "y" ]; then
     echo "extension=openssl.so;" > $CFG/conf.d/openssl.ini
     echo "extension=curl.so;" > $CFG/conf.d/curl.ini
     echo "extension=gd.so;" > $CFG/conf.d/gd.ini
-    echo "extension=gettext.so;" > $CFG/conf.d/gettext.ini
+    # echo "extension=gettext.so;" > $CFG/conf.d/gettext.ini
 
     # defaults
     echo "date.timezone=\"Europe/Moscow\";" > $CFG/conf.d/defaults.ini
@@ -147,7 +148,8 @@ read -p "Pecl install imagick (y/n)?" REPLY
 if [ $REPLY = "y" ]; then
     apt-get build-dep php5-imagick --install-recommends
     cd $PREFIX/bin/
-    ./pecl install -f imagick-3.1.2
+#    ./pecl install -f imagick-3.1.2
+    ./pecl install -f imagick
     echo "extension=imagick.so;" > $CFG/conf.d/imagick.ini
 fi;
 
