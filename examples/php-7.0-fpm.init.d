@@ -5,7 +5,7 @@
 # Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: starts php-7.1-fpm
+# Short-Description: starts php-7.0-fpm
 # Description:       starts the PHP FastCGI Process Manager daemon
 ### END INIT INFO
 php_fpm_BIN=/opt/php-7.0/sbin/php-fpm
