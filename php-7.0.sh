@@ -95,7 +95,7 @@ if [ $REPLY = "y" ]; then
 	--with-png-dir=/usr \
 	--with-config-file-path="$CFG" \
 	--with-config-file-scan-dir="$CFG/conf.d" \
-	--enable-fpm 
+#	--enable-fpm 
 	#--enable-debug
 	#--with-pgsql
 	#--with-pic \
@@ -172,16 +172,7 @@ if [ $REPLY = "y" ]; then
     # pdo mysql socket
     echo "pdo_mysql.default_socket=\"/var/run/mysqld/mysqld.sock\";" > $CFG/conf.d/pdo.ini
     
-    # fpm
-    echo "[global]" > $CFG/php-fpm.conf
-    echo "pid = /run/php/php-7.0-fpm.pid" >> $CFG/php-fpm.conf
-    echo "error_log = /var/log/php-7.0-fpm.log" >> $CFG/php-fpm.conf
-    echo "include=/opt/php-7.0-fpm.d/*.conf" >> $CFG/php-fpm.conf
-    
-    rm -r $CFG/php-fpm.d
-    rm -r $CFG/php-fpm.conf.default
 fi;
-
 #
 # Pecl imagemagic
 #
